@@ -1,14 +1,10 @@
-# weather
+# Weather
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a site where you can see the weather, I use [OpenWeather](https://openweathermap.org/) to get weather data. To create a design and prototype [Figma](https://www.figma.com/file/pCckCeomui5t0yrvMBFDea/Weather).
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
 ## Project Setup
 
