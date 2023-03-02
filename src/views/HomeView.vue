@@ -49,14 +49,6 @@ export default {
     const alt = this.weather.weather[0].description;
     this.iconWeather = icon;
     this.iconAlt = alt;
-
-    // Getting a time
-    // const date = new Date(this.weather.dt * 1000);
-    // const day = date.getDay();
-    // const hours = date.getHours();
-    // const minutes = date.getMinutes();
-    // const dateCity = hours + ':' + minutes;
-    // console.log(day, dateCity);
   },
   methods: {
     searchWeather() {
@@ -98,24 +90,22 @@ export default {
             <div class="weather__flex weather__flex_column">
               <div class="weather__flex weather__flex_space-between">
                 <h1 class="weather__temp" v-if="fahrenheit">
-                  {{ Math.round(this.weather.main.temp * 1.8 - 459.67) }} °F
+                  {{ Math.round(weather.main.temp * 1.8 - 459.67) }} °F
                 </h1>
-                <h1 class="weather__temp" v-else>
-                  {{ Math.round(this.weather.main.temp - 273) }} °C
-                </h1>
-                <img class="weather__icon" :src="this.iconWeather" :alt="iconAlt" />
+                <h1 class="weather__temp" v-else>{{ Math.round(weather.main.temp - 273) }} °C</h1>
+                <img class="weather__icon" :src="iconWeather" :alt="iconAlt" />
               </div>
               <div class="weather__flex weather__flex_gap">
                 <p class="weather__more" v-if="fahrenheit">
-                  Feels like {{ Math.round(this.weather.main.feels_like * 1.8 - 459.67) }} °F.
+                  Feels like {{ Math.round(weather.main.feels_like * 1.8 - 459.67) }} °F.
                 </p>
                 <p class="weather__more" v-else>
-                  Feels like {{ Math.round(this.weather.main.feels_like - 273) }} °C.
+                  Feels like {{ Math.round(weather.main.feels_like - 273) }} °C.
                 </p>
                 <p class="weather__more">
                   {{
-                    this.weather.weather[0].description[0].toUpperCase() +
-                    this.weather.weather[0].description.slice(1) +
+                    weather.weather[0].description[0].toUpperCase() +
+                    weather.weather[0].description.slice(1) +
                     '.'
                   }}
                 </p>
@@ -123,17 +113,17 @@ export default {
             </div>
           </header>
           <div class="weather__info">
-            <p class="weather__location">{{ this.weather.name }}, {{ this.weather.sys.country }}</p>
+            <p class="weather__location">{{ weather.name }}, {{ weather.sys.country }}</p>
           </div>
           <div class="weather__more-info">
             <div class="weather__flex weather__flex_more">
               <div class="weather__flex weather__flex_gap">
-                <p class="weather__more">Clouds: {{ this.weather.clouds.all }}%</p>
-                <p class="weather__more">Visibility: {{ this.weather.visibility * 0.001 }}km</p>
+                <p class="weather__more">Clouds: {{ weather.clouds.all }}%</p>
+                <p class="weather__more">Visibility: {{ weather.visibility * 0.001 }}km</p>
               </div>
               <div class="weather__flex weather__flex_gap">
-                <p class="weather__more">Pressure: {{ this.weather.main.pressure }}hPa</p>
-                <p class="weather__more">Humidity: {{ this.weather.main.humidity }}%</p>
+                <p class="weather__more">Pressure: {{ weather.main.pressure }}hPa</p>
+                <p class="weather__more">Humidity: {{ weather.main.humidity }}%</p>
               </div>
             </div>
           </div>
