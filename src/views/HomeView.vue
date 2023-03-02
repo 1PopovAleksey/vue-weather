@@ -1,48 +1,27 @@
-<script setup>
-// import popupSetting from '../components/popupSetting/popupSetting.vue';
-</script>
-
 <script>
 import axios from 'axios';
 
 export default {
   data() {
     return {
-      weather: {
-        coord: { lon: -0.1257, lat: 51.5085 },
-        weather: [{ id: 803, main: 'Clouds', description: 'облачно с прояснениями', icon: '04n' }],
-        base: 'stations',
-        main: {
-          temp: 274.47,
-          feels_like: 272.84,
-          temp_min: 271.8,
-          temp_max: 275.92,
-          pressure: 1024,
-          humidity: 89
-        },
-        visibility: 10000,
-        wind: { speed: 1.54, deg: 0 },
-        clouds: { all: 75 },
-        dt: 1677739394,
-        sys: { type: 2, id: 2075535, country: 'GB', sunrise: 1677739479, sunset: 1677778869 },
-        timezone: 0,
-        id: 2643743,
-        name: 'Лондон',
-        cod: 200
-      },
+      loading: true,
       fahrenheit: false,
-      city: 'Novosibirsk',
+      weather: {},
+      city: 'London',
       language: 'en',
       API: '6d7fe5b25fda98a2bfc7453dfdda7b50',
       iconWeather: '',
       iconAlt: ''
     };
   },
-  async created() {
+  async mounted() {
     // Request to receive the weather
     const urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&lang=${this.language}&appid=${this.API}`;
     // const urlForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${this.city}&appid=${this.API}`;
-    await axios.get(urlWeather).then((response) => (this.weather = response.data));
+    await axios
+      .get(urlWeather)
+      .then((response) => (this.weather = response.data))
+      .finally((this.loading = false));
 
     // Obtaining an icon
     const icon = `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
@@ -51,16 +30,25 @@ export default {
     this.iconAlt = alt;
   },
   methods: {
-    searchWeather() {
+    async searchWeather() {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&lang=${this.language}&appid=${this.API}`;
-      axios.get(url).then((response) => (this.weather = response.data));
+      await axios
+        .get(url)
+        .then((response) => (this.weather = response.data))
+        .finally((this.loading = false));
+
+      const icon = `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
+      const alt = this.weather.weather[0].description;
+      this.iconWeather = icon;
+      this.iconAlt = alt;
     }
   }
 };
 </script>
 
 <template>
-  <header class="header">
+  <!-- Header -->
+  <header v-if="!loading" class="header">
     <div class="header__container">
       <div class="header__search">
         <input type="text" v-model="city" />
@@ -82,7 +70,8 @@ export default {
       </div>
     </div>
   </header>
-  <main>
+  <!-- Main -->
+  <main v-if="!loading">
     <section class="weather">
       <div class="weather__container">
         <div class="weather__offset">
@@ -131,7 +120,66 @@ export default {
       </div>
     </section>
   </main>
-  <!-- <popupSetting /> -->
+  <!-- Loading -->
+  <div class="loading" v-if="loading">
+    <header class="header">
+      <div class="header__container">
+        <div class="header__search">
+          <input type="text" value="///" />
+          <button @click="searchWeather">
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 26 26"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.5 9.79627C19.5 14.9208 15.2565 19.0925 10 19.0925C4.74354 19.0925 0.5 14.9208 0.5 9.79627C0.5 4.67174 4.74354 0.5 10 0.5C15.2565 0.5 19.5 4.67174 19.5 9.79627Z"
+                stroke="#100904"
+              />
+              <path d="M16.7051 16.9387L25 24.9805" stroke="#100904" stroke-width="2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="weather">
+        <div class="weather__container">
+          <div class="weather__offset">
+            <header class="weather__header">
+              <div class="weather__flex weather__flex_column">
+                <div class="weather__flex weather__flex_space-between">
+                  <h1 class="weather__temp">///</h1>
+                  <img class="weather__icon" :src="iconWeather" :alt="iconAlt" />
+                </div>
+                <div class="weather__flex weather__flex_gap">
+                  <p class="weather__more">Feels like ///.</p>
+                  <p class="weather__more">//////</p>
+                </div>
+              </div>
+            </header>
+            <div class="weather__info">
+              <p class="weather__location">//////, //</p>
+            </div>
+            <div class="weather__more-info">
+              <div class="weather__flex weather__flex_more">
+                <div class="weather__flex weather__flex_gap">
+                  <p class="weather__more">Clouds: ///</p>
+                  <p class="weather__more">Visibility: ///</p>
+                </div>
+                <div class="weather__flex weather__flex_gap">
+                  <p class="weather__more">Pressure: ///</p>
+                  <p class="weather__more">Humidity: ///</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -261,6 +309,22 @@ export default {
     flex-direction: column;
     gap: 10px;
     margin: 15px 0;
+  }
+}
+
+.loading {
+  animation-duration: 3s;
+  animation-name: appearance;
+  transition: all 0.3s ease;
+
+  @keyframes appearance {
+    from {
+      opacity: 0%;
+    }
+
+    to {
+      opacity: 100%;
+    }
   }
 }
 </style>
